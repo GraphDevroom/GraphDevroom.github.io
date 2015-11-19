@@ -1,0 +1,356 @@
+﻿
+body {
+    background:                 url('/assets/bg.jpg');
+    color:                      #333;
+    font-family:                'Open Sans', sans-serif;
+}
+
+.lila {
+    color:                      #ad3092;
+}
+
+.high {
+    vertical-align:             5px;
+    font-size:                  68%;
+}
+
+#logo {
+    position:                   fixed;
+    top:                        calc(50% - 2.6vw);
+    left:                       calc(50% - 16vw);
+    width:                      32vw;
+    height:                     5.2vw;
+    /*background-color:           rgba(255, 0, 255, 0.05);*/
+}
+
+#fosdemlogo {
+    position:                   absolute;
+    top:                        0px;
+    left:                       0px;
+}
+
+#fosdemlogo img {
+    width:                      5.2vw;
+}
+
+#text {
+    position:                   absolute;
+    top:                        0.8vw;
+    left:                       6vw;
+    display:                    inline-block;
+    font-family:                'Open Sans', sans-serif;
+}
+
+#title {
+    display:                    inline-block;
+    color:                      #555555;
+    font-weight:                bold;
+    font-style:                 italic;
+    font-size:                  1.3vw;
+    line-height:                1.6vw;
+}
+
+#where {
+    display:                    inline-block;
+    color:                      #7A7A7A;
+    font-size:                  0.7vw;
+    line-height:                0.7vw;
+    text-transform:             uppercase;
+}
+
+#when {
+    display:                    inline-block;
+    color:                      #7A7A7A;
+    font-size:                  0.7vw;
+    line-height:                0.7vw;
+}
+
+
+#links {
+    position:                   fixed;
+    bottom:                     15px;
+    right:                      15px;
+    display:                    inline-block;
+    z-index:                    10;
+}
+
+#links a:link {
+    text-decoration:            none;
+    color:                      #C8C8C8;
+    padding:                    0px 6px 0px 6px;
+}
+
+#links a:visited {
+    text-decoration:            none;
+    color:                      #C8C8C8;
+}
+
+#links a:hover {
+    text-decoration:            none;
+    color:                      #ad3092;
+    text-shadow:                -2px -2px 4px rgba(255, 255, 255, 0.95),
+                                 2px -2px 4px rgba(255, 255, 255, 0.95),
+                                -2px  2px 4px rgba(255, 255, 255, 0.95),
+                                 2px  2px 4px rgba(255, 255, 255, 0.95);
+}
+
+#links a:active {
+    text-decoration:            none;
+    color:                      #ad3092;
+}
+
+
+#navigation a:link {
+    text-decoration:            none;
+    color:                      #7A7A7A;
+    padding:                    0px 24px 0px 24px;
+}
+
+#navigation a:visited {
+    text-decoration:            none;
+    color:                      #7A7A7A;
+}
+
+#navigation a:hover {
+    text-decoration:            none;
+    color:                      #7A7A7A;
+}
+
+#navigation a:active {
+    text-decoration:            none;
+    color:                      #7A7A7A;
+}
+
+#graphbackground {
+    width:                      100%;
+    height:                     100%;
+    position:                   fixed;
+    z-index:                    8;
+    overflow:                   auto;
+}
+
+#graphframe {
+    position:                   fixed;
+    z-index:                    1;
+    top:                        5px;
+    left:                       5px;
+    bottom:                     5px;
+    right:                      5px;
+}
+
+.textarea {
+    position:                   relative;
+    top:                        5vh;
+    left:                       3vw;
+    width:                      48vw;
+    z-index:                    5;
+    background-color:           rgba(255, 255, 255, 0.95);
+    border:                     1px solid rgba(77,77,77, 0.6);
+    border-radius:              4px 4px 4px 4px;
+    box-shadow:                 4px 4px 4px rgba(100, 100, 100, 0.7);
+    /*padding:                    2vh 2vw 2vh 5vw;*/
+    padding:                    20px 20px 40px 30px;
+    line-height:                135%;
+    font-size:                  96%;
+    overflow:                   auto;
+    /*font-size: 2vh;*/
+}
+
+.textarea h1 {
+    padding-top:                5px;
+    padding-bottom:             10px;
+    font-size:                  150%;
+    color:                      rgba(110, 41, 127, 1.0);
+}
+
+/*.textarea ul {
+    list-style-type:            none;
+}
+
+.textarea ul li:before {
+    color:                      rgba(110, 41, 127, 1.0);
+    content:                    "• ";
+}*/
+
+.textareaclose {
+    position:                   absolute;
+    top:                        10px;
+    right:                      12px;
+}
+
+.textareaclose a {
+    color:                      #000000;
+}
+
+.textareaclose a:hover {
+    color:                      #ad3092;
+}
+
+
+.nexttextarea {
+    position:                   absolute;
+    width:                      calc(100% - 50px);
+    bottom:                     10px;
+    font-size:                  85%;
+    text-align:                 right;
+}
+
+.nexttextarea a {
+    color:                      rgba(110, 41, 127, 1.0);
+    text-decoration:            none;
+}
+
+
+.highlight {
+    margin:                     -2px;
+    padding:                    1px 4px 1px 4px;
+    background:                 rgba(110, 41, 127, 0.18);
+    border-radius:              6px;
+}
+
+#map {
+    position:                   fixed;
+    z-index:                    1;
+    top:                        30px;
+    height:                     calc(30% - 1px);
+    width:                      35%;
+    left:                       61%;
+    border:                     solid #FFFFFF;
+    border-width:               0.85vmin;
+    border-radius:              5px;
+    box-shadow:                 2px 2px rgba(100, 100, 100, 0.7);
+    transform:                  rotate(-3deg);
+}
+
+#MapBackground {
+    position:                   fixed;
+    z-index:                    9;
+    width:                      100%;
+    height:                     100%;
+    background-color:           rgba(255, 255, 255, 0.7);
+    display:                    none;
+}
+
+#OpenData1 {
+    position:                   relative;
+    z-index:                    10;
+    background-color:           rgba(255, 255, 255, 0.85);
+    border:                     1px solid rgba(77,77,77, 0.3);
+    border-radius:              4px 4px 4px 4px;
+    box-shadow:                 0px 0px 3px rgba(100, 100, 100, 0.7);
+    padding:                    10px 10px 10px 20px;
+    top:                        50px;
+    left:                       50px;
+    width:                      25%;
+    display:                    none;
+}
+
+#photos {
+    position:                   fixed;
+    z-index:                    1;
+    top:                        55%;
+    height:                     calc(30% - 1px);
+    width:                      30%;
+    left:                       65%;
+    border:                     solid #FFFFFF;
+    border-width:               0.85vmin;
+    border-radius:              5px;
+    box-shadow:                 2px 2px rgba(100, 100, 100, 0.7);
+    transform:                  rotate(-1deg);
+}
+
+#photos img {
+    z-index:                    1;
+    width:                      100%;
+    height:                     100%;
+    opacity:                    0.3;
+}
+
+.leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale {
+    font-size:                  0.5vmin;
+}
+
+.leaflet-touch .leaflet-bar a {
+    width:                      4vmin;
+    height:                     4vmin;
+    line-height:                4vmin;
+}
+
+.leaflet-touch .leaflet-control-zoom-in {
+    font-size:                  3vmin;
+}
+
+.leaflet-touch .leaflet-control-zoom-out {
+    font-size:                  3vmin;
+}
+
+.leaflet-control-locate a {
+    font-size:                  3vmin;
+}
+
+@media only screen and (orientation: portrait) {
+
+/* Workarounds as IE does not support vmax! */
+
+    #logo {
+        font-size:                  1.8vh;
+    }
+
+    #navigation {
+        font-size:                  0.9vh;
+    }
+
+    #datetime {
+        font-size:                  0.9vh;
+    }
+
+    /*#map {
+        border-width:               0.75vh;
+    }
+
+    #photos {
+        border-width:               0.75vh;
+    }
+
+    .leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale {
+        font-size:                  0.5vh;
+    }*/
+
+}
+
+
+
+
+
+.info {
+    padding:        6px 8px;
+    font:           12px/14px Arial, Helvetica, sans-serif;
+    background:     rgba(255, 255, 255, 0.8);
+    box-shadow:     0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius:  3px;
+}
+
+.info h4 {
+    margin:         0 0 4px;
+    color:          #777;
+}
+
+
+
+
+
+
+.legend {
+    line-height:    18px;
+    color:          #555;
+}
+
+.legend i {
+    width:          18px;
+    height:         16px;
+    float:          left;
+    margin-right:   8px;
+    opacity:        0.7;
+}
+
+
