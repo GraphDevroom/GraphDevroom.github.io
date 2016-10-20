@@ -452,10 +452,10 @@
 
             springy.clear();
 
-            var FOSDEM              = graph.newVertex('text', { label: 'FOSDEM\'16' });
+            var FOSDEM              = graph.newVertex('text', { label: 'FOSDEM\'17' });
             var FOSDEMWebsite       = graph.newVertex('tag',  { label: 'website',  gotoURI: 'http://www.fosdem.org' });
-            var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2016/news/2015-10-22-accepted-devrooms/' });
-            var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2016/schedule/' });
+            var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2017/news/2016-10-10-accepted-developer-rooms/' });
+            var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2017/schedule/' });
 
             graph.newEdge(FOSDEM, 'goto', FOSDEMWebsite);
             graph.newEdge(FOSDEM, 'goto', FOSDEMDevrooms);
@@ -479,7 +479,7 @@
 
             var Twitter             = graph.newVertex('tag', { label: 'Twitter',      gotoURI: 'https://twitter.com/graphdevroom' });
             var GitHub              = graph.newVertex('tag', { label: 'GitHub',       gotoURI: 'https://github.com/graphdevroom' });
-            var EMail               = graph.newVertex('tag', { label: 'E-Mail',       gotoURI: 'mailto:fosdem2016@graphdevroom.org' });
+            var EMail               = graph.newVertex('tag', { label: 'E-Mail',       gotoURI: 'mailto:fosdem2017@graphdevroom.org' });
             var Google              = graph.newVertex('tag', { label: 'GoogleGroups', gotoURI: 'https://groups.google.com/d/forum/graphdevroom' });
             var GooglePlus          = graph.newVertex('tag', { label: 'Google+',      gotoURI: 'https://plus.google.com/u/0/communities/114424455964265722048' });
             var YouTube             = graph.newVertex('tag', { label: 'YouTube',      gotoURI: 'http://www.youtube.com/graphprocessing' });
@@ -500,12 +500,14 @@
             graph.newEdge(CfP,          'next', Team,           { color: 'rgba(110, 41, 127, 0.87)', label: "who we are",           directional: true });
             graph.newEdge(Team,         'next', Contact,        { color: 'rgba(110, 41, 127, 0.87)', label: "how to contact us",    directional: true });
 
+            var year2015 = graph.newVertex('history', { label: '2016' });
             var year2015 = graph.newVertex('history', { label: '2015' });
             var year2014 = graph.newVertex('history', { label: '2014' });
             var year2013 = graph.newVertex('history', { label: '2013' });
             var year2012 = graph.newVertex('history', { label: '2012' });
             var year2011 = graph.newVertex('history', { label: '2011' });
 
+            graph.newEdge(GraphDevroom, 'lookback', year2016);
             graph.newEdge(GraphDevroom, 'lookback', year2015);
             graph.newEdge(GraphDevroom, 'lookback', year2014);
             graph.newEdge(GraphDevroom, 'lookback', year2013);
@@ -527,7 +529,7 @@
       </div>
 
       <div id="text">
-          <span id="title">FOSDEM<span class="lila high">'16</span> GraphDevroom</span><br>
+          <span id="title">FOSDEM<span class="lila high">'17</span> GraphDevroom</span><br>
           <span id="where">Université Libre de Bruxelles, Brussels, Belgium</span><br>
           <span id="when">Sat, 30 January 2016</span>
       </div>
@@ -547,11 +549,11 @@
         <h1>Call for Participation</h1>
 
         <p>We are happy to announce the <span class="highlight">5th edition of the Graph Devroom</span> 
-        co-located with <a href="https://fosdem.org/2016">FOSDEM 2016</a> at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.
+        co-located with <a href="https://fosdem.org/2016">FOSDEM 2017</a> in Room H.2214 at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.
         FOSDEM is an annually software developers meeting attended by 
         over 5000 free and open source enthusiasts from all over the world. The 
-        devroom will take place on <span class="highlight">Saturday, 30. January 2016</span> with a welcome at 
-        9:45, and <span class="highlight">talks from 10AM till 18PM</span>.</p>
+        devroom will take place on <span class="highlight">Saturday, 4. February 2017</span> with a welcome at 
+        10:00, and <span class="highlight">talks from 10:30AM till 19PM</span>.</p>
 
         <p>For the last years graph processing systems have gained a clear
         impact for processing complex, semi-structured, interrelated and 
@@ -563,7 +565,7 @@
         is a great opportunity to learn from the experts</p>
 
         <p>In previous devrooms we saw many great presentations and demos. 
-	    Deep discussions took place during and after the talks. Therefore, also in 2016 
+	    Deep discussions took place during and after the talks. Therefore, also in 2017
         we will again give creators and maintainers of graph solutions, researchers, geeks and open source hackers the 
         possibility of presenting their latest work to an attentive audience. This includes:</p>
 
@@ -606,7 +608,7 @@
         based on free and open software solutions or free and open APIs.</span>
         <span class="highlight">All accepted presentations will be recorded.</span></p>
 
-        <p>To submit a talk, please go to the <a href="https://penta.fosdem.org/submission/FOSDEM16">FOSDEM submission system</a>
+        <p>To submit a talk, please go to the <a href="https://penta.fosdem.org/submission/FOSDEM17">FOSDEM submission system</a>
         and follow the instructions. If you previously spoke at FOSDEM, chances
         are high that you already have an account! If you forgot your password,
         do just reset it. If not, follow the instructions to create an account.
@@ -638,7 +640,7 @@
         </ul>
 
         <p>To avoid any kind of misunderstandings and lost submissions please send also a
-        short e-mail to <a href="mailto:fosdem2016@graphdevroom.org">fosdem2016@graphdevroom.org</a>
+        short e-mail to <a href="mailto:fosdem2017@graphdevroom.org">fosdem2017@graphdevroom.org</a>
         and wait for our confirmation.</p>
 
         <div class="textareaclose">
@@ -657,11 +659,11 @@
 
         <table style="width: 100%">
           <tbody>
-          <tr><td>Submission deadline              </td><td style="white-space: nowrap">14. Dec 2015</td></tr>
-          <tr><td>Notification of accepted speakers</td><td style="white-space: nowrap">18. Dec 2015</td></tr>
-          <tr><td>Preliminary Schedule             </td><td style="white-space: nowrap">18. Dec 2015</td></tr>
-          <tr><td>Publication of the final schedule</td><td style="white-space: nowrap">10. Jan 2016</td></tr>
-          <tr><td>Devroom day                      </td><td style="white-space: nowrap">30. Jan 2016</td></tr>
+          <tr><td>Submission deadline              </td><td style="white-space: nowrap">25. Nov 2016</td></tr>
+          <tr><td>Notification of accepted speakers</td><td style="white-space: nowrap">01. Dec 2016</td></tr>
+          <tr><td>Preliminary Schedule             </td><td style="white-space: nowrap">05. Dec 2016</td></tr>
+          <tr><td>Publication of the final schedule</td><td style="white-space: nowrap">11. Dec 2016</td></tr>
+          <tr><td>Devroom day (H.2214)             </td><td style="white-space: nowrap">04. Feb 2017</td></tr>
         </tbody></table>
 
         <div class="textareaclose">
@@ -678,13 +680,12 @@
 
         <h1>The Orgteam</h1>
 
-        <p>can be reached via <a href="mailto:fosdem2016@graphdevroom.org">fosdem2016@graphdevroom.org</a>.</p>
+        <p>can be reached via <a href="mailto:fosdem2017@graphdevroom.org">fosdem2017@graphdevroom.org</a>.</p>
 
         <ul>
             <li>Michael Hunger, Caretaker Neo4j User Community</li>
             <li>Achim Friedland, Founder of GraphDefined GmbH</li>
             <li>Martin Junghanns, University of Leipzig</li>
-            <li>Kenny Bastani, Pivotal</li>
         </ul>
 
         <p>Any kind of ideas, suggestions and helping hands are <a href="https://etherpad.wikimedia.org/p/GraphDevroom" target="_blank">always</a> welcome.</p>
