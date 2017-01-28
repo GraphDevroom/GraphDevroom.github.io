@@ -302,6 +302,13 @@
             this.data.weight        = (this.data.weight         !== undefined) ? this.data.weight       : 1;
         }
 
+        else if (EdgeLabel == "lookahead") {
+            this.data.label         = (this.data.label          !== undefined) ? this.data.label        : 'look ahead';
+            this.data.color         = (this.data.color          !== undefined) ? this.data.color        : 'rgba(110, 41, 127, 0.87)';
+            this.data.directional   = (this.data.directional    !== undefined) ? this.data.directional  : true;
+            this.data.weight        = (this.data.weight         !== undefined) ? this.data.weight       : 2;
+        }
+
     };
 
     Graph.prototype.addEdge = function (edge) {
