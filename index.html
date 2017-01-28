@@ -456,6 +456,7 @@
             var FOSDEMWebsite       = graph.newVertex('tag',  { label: 'website',  gotoURI: 'http://www.fosdem.org' });
             var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2017/news/2016-10-10-accepted-developer-rooms/' });
             var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2017/schedule/' });
+            var year2017            = graph.newVertex('tag', { label: '2017 schedule', gotoURI: 'https://fosdem.org/2017/schedule/track/graph/' });
 
             graph.newEdge(FOSDEM, 'goto', FOSDEMWebsite);
             graph.newEdge(FOSDEM, 'goto', FOSDEMDevrooms);
@@ -507,6 +508,7 @@
             var year2012 = graph.newVertex('history', { label: '2012' });
             var year2011 = graph.newVertex('history', { label: '2011' });
 
+            graph.newEdge(GraphDevroom, 'lookahead', year2017);
             graph.newEdge(GraphDevroom, 'lookback', year2016);
             graph.newEdge(GraphDevroom, 'lookback', year2015);
             graph.newEdge(GraphDevroom, 'lookback', year2014);
