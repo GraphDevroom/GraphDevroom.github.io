@@ -2,10 +2,10 @@
 <!-- saved from url=(0024)http://graphdevroom.org/ -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>FOSDEM GraphDevroom 2017</title>
+    <title>FOSDEM GraphDevroom 2018</title>
 
     <meta name="keywords" content="GraphDevroom">
-    <meta name="description" content="FOSDEM GraphDevroom 2017">
+    <meta name="description" content="FOSDEM GraphDevroom 2018">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
 
@@ -452,11 +452,11 @@
 
             springy.clear();
 
-            var FOSDEM              = graph.newVertex('text', { label: 'FOSDEM\'17' });
+            var FOSDEM              = graph.newVertex('text', { label: 'FOSDEM\'18' });
             var FOSDEMWebsite       = graph.newVertex('tag',  { label: 'website',  gotoURI: 'http://www.fosdem.org' });
-            var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2017/news/2016-10-10-accepted-developer-rooms/' });
-            var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2017/schedule/' });
-            var year2017            = graph.newVertex('tag', { label: '2017 schedule', gotoURI: 'https://fosdem.org/2017/schedule/track/graph/' });
+            var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2018/news/2017-10-04-accepted-developer-rooms/' });
+            var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2018/schedule/' });
+            var year2018            = graph.newVertex('tag', { label: '2018 schedule', gotoURI: 'https://fosdem.org/2018/schedule/track/graph/' });
 
             graph.newEdge(FOSDEM, 'goto', FOSDEMWebsite);
             graph.newEdge(FOSDEM, 'goto', FOSDEMDevrooms);
@@ -480,7 +480,7 @@
 
             var Twitter             = graph.newVertex('tag', { label: 'Twitter',      gotoURI: 'https://twitter.com/graphdevroom' });
             var GitHub              = graph.newVertex('tag', { label: 'GitHub',       gotoURI: 'https://github.com/graphdevroom' });
-            var EMail               = graph.newVertex('tag', { label: 'E-Mail',       gotoURI: 'mailto:fosdem2017@graphdevroom.org' });
+            var EMail               = graph.newVertex('tag', { label: 'E-Mail',       gotoURI: 'mailto:fosdem2018@graphdevroom.org' });
             var Google              = graph.newVertex('tag', { label: 'GoogleGroups', gotoURI: 'https://groups.google.com/d/forum/graphdevroom' });
             var GooglePlus          = graph.newVertex('tag', { label: 'Google+',      gotoURI: 'https://plus.google.com/u/0/communities/114424455964265722048' });
             var YouTube             = graph.newVertex('tag', { label: 'YouTube',      gotoURI: 'http://www.youtube.com/graphprocessing' });
@@ -501,6 +501,7 @@
             graph.newEdge(CfP,          'next', Team,           { color: 'rgba(110, 41, 127, 0.87)', label: "who we are",           directional: true });
             graph.newEdge(Team,         'next', Contact,        { color: 'rgba(110, 41, 127, 0.87)', label: "how to contact us",    directional: true });
 
+	    var year2017 = graph.newVertex('history', { label: '2017' });
             var year2016 = graph.newVertex('history', { label: '2016' });
             var year2015 = graph.newVertex('history', { label: '2015' });
             var year2014 = graph.newVertex('history', { label: '2014' });
@@ -508,7 +509,8 @@
             var year2012 = graph.newVertex('history', { label: '2012' });
             var year2011 = graph.newVertex('history', { label: '2011' });
 
-            graph.newEdge(GraphDevroom, 'lookahead', year2017);
+	    graph.newEdge(GraphDevroom, 'lookahead', year2018);
+            graph.newEdge(GraphDevroom, 'lookback', year2017);
             graph.newEdge(GraphDevroom, 'lookback', year2016);
             graph.newEdge(GraphDevroom, 'lookback', year2015);
             graph.newEdge(GraphDevroom, 'lookback', year2014);
@@ -531,9 +533,9 @@
       </div>
 
       <div id="text">
-          <span id="title">FOSDEM<span class="lila high">'17</span> GraphDevroom</span><br>
+          <span id="title">FOSDEM<span class="lila high">'18</span> GraphDevroom</span><br>
           <span id="where">H.2214, Université Libre de Bruxelles, Brussels, Belgium</span><br>
-          <span id="when">Sat, 04 February 2017</span>
+          <span id="when">Sat, 03 February 2018</span>
       </div>
 
     </div>
@@ -550,11 +552,11 @@
 
         <h1>Call for Participation</h1>
 
-        <p>We are happy to announce the <span class="highlight">5th edition of the Graph Devroom</span> 
-        co-located with <a href="https://fosdem.org/2017">FOSDEM 2017</a> in Room H.2214 at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.
+        <p>We are happy to announce the <span class="highlight">6th edition of the Graph Devroom</span> 
+        co-located with <a href="https://fosdem.org/2018">FOSDEM 2018</a> in Room H.2214 at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.
         FOSDEM is an annually software developers meeting attended by 
         over 5000 free and open source enthusiasts from all over the world. The 
-        devroom will take place on <span class="highlight">Saturday, 4. February 2017</span> with a welcome at 
+        devroom will take place on <span class="highlight">Saturday, 3. February 2018</span> with a welcome at 
         10:00, and <span class="highlight">talks from 10:30AM till 19PM</span>.</p>
 
         <p>For the last years graph processing systems have gained a clear
@@ -567,7 +569,7 @@
         is a great opportunity to learn from the experts</p>
 
         <p>In previous devrooms we saw many great presentations and demos. 
-	    Deep discussions took place during and after the talks. Therefore, also in 2017
+	    Deep discussions took place during and after the talks. Therefore, also in 2018
         we will again give creators and maintainers of graph solutions, researchers, geeks and open source hackers the 
         possibility of presenting their latest work to an attentive audience. This includes:</p>
 
@@ -642,7 +644,7 @@
         </ul>
 
         <p>To avoid any kind of misunderstandings and lost submissions please send also a
-        short e-mail to <a href="mailto:fosdem2017@graphdevroom.org">fosdem2017@graphdevroom.org</a>
+        short e-mail to <a href="mailto:fosdem2018@graphdevroom.org">fosdem2018@graphdevroom.org</a>
         and wait for our confirmation.</p>
 
         <div class="textareaclose">
@@ -661,11 +663,11 @@
 
         <table style="width: 100%">
           <tbody>
-          <tr><td>Submission deadline              </td><td style="white-space: nowrap">25. Nov 2016</td></tr>
-          <tr><td>Notification of accepted speakers</td><td style="white-space: nowrap">01. Dec 2016</td></tr>
-          <tr><td>Preliminary Schedule             </td><td style="white-space: nowrap">05. Dec 2016</td></tr>
-          <tr><td>Publication of the final schedule</td><td style="white-space: nowrap">11. Dec 2016</td></tr>
-          <tr><td>Devroom day (H.2214)             </td><td style="white-space: nowrap">04. Feb 2017</td></tr>
+          <tr><td>Submission deadline              </td><td style="white-space: nowrap">25. Nov 2017</td></tr>
+          <tr><td>Notification of accepted speakers</td><td style="white-space: nowrap">01. Dec 2017</td></tr>
+          <tr><td>Preliminary Schedule             </td><td style="white-space: nowrap">05. Dec 2017</td></tr>
+          <tr><td>Publication of the final schedule</td><td style="white-space: nowrap">11. Dec 2017</td></tr>
+          <tr><td>Devroom day (H.2214)             </td><td style="white-space: nowrap">03. Feb 2018</td></tr>
         </tbody></table>
 
         <div class="textareaclose">
@@ -682,7 +684,7 @@
 
         <h1>The Orgteam</h1>
 
-        <p>can be reached via <a href="mailto:fosdem2017@graphdevroom.org">fosdem2017@graphdevroom.org</a>.</p>
+        <p>can be reached via <a href="mailto:fosdem2018@graphdevroom.org">fosdem2018@graphdevroom.org</a>.</p>
 
         <ul>
             <li>Michael Hunger, Caretaker Neo4j User Community</li>
