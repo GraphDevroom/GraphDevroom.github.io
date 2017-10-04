@@ -167,7 +167,7 @@
                 graph: graph,
                 nodeSelected: function (node) {
 
-                    if (node.VertexLabel == 'tag') {
+                    if (node.VertexLabel == 'tag' || node.VertexLabel == 'history') {
 
                         if (node.data.gotoURI !== undefined)
                             window.open(node.data.gotoURI, '_blank');
@@ -501,13 +501,13 @@
             graph.newEdge(CfP,          'next', Team,           { color: 'rgba(110, 41, 127, 0.87)', label: "who we are",           directional: true });
             graph.newEdge(Team,         'next', Contact,        { color: 'rgba(110, 41, 127, 0.87)', label: "how to contact us",    directional: true });
 
-	    var year2017 = graph.newVertex('history', { label: '2017' });
-            var year2016 = graph.newVertex('history', { label: '2016' });
-            var year2015 = graph.newVertex('history', { label: '2015' });
-            var year2014 = graph.newVertex('history', { label: '2014' });
-            var year2013 = graph.newVertex('history', { label: '2013' });
-            var year2012 = graph.newVertex('history', { label: '2012' });
-            var year2011 = graph.newVertex('history', { label: '2011' });
+	    var year2017 = graph.newVertex('history', { label: '2017', gotoURI: 'https://archive.fosdem.org/2017/schedule/track/graph/' });
+            var year2016 = graph.newVertex('history', { label: '2016', gotoURI: 'https://archive.fosdem.org/2016/schedule/track/graph_processing/' });
+            var year2015 = graph.newVertex('history', { label: '2015', gotoURI: 'https://archive.fosdem.org/2015/schedule/track/graph_processing/' });
+            var year2014 = graph.newVertex('history', { label: '2014', gotoURI: 'https://archive.fosdem.org/2014/schedule/track/graph_processing/' });
+            var year2013 = graph.newVertex('history', { label: '2013', gotoURI: 'https://archive.fosdem.org/2013/schedule/track/graph_processing/' });
+            var year2012 = graph.newVertex('history', { label: '2012', gotoURI: 'https://archive.fosdem.org/2012/schedule/track/graph_processing_devroom.html' });
+            var year2011 = graph.newVertex('history', { label: '2011', gotoURI: 'https://archive.fosdem.org/2011/schedule/track/data_analytics_devroom.html' });
 
 	    graph.newEdge(GraphDevroom, 'lookahead', year2018);
             graph.newEdge(GraphDevroom, 'lookback', year2017);
