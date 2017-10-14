@@ -456,7 +456,7 @@
             var FOSDEMWebsite       = graph.newVertex('tag',  { label: 'website',  gotoURI: 'http://www.fosdem.org' });
             var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2018/news/2017-10-04-accepted-developer-rooms/' });
             var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2018/schedule/' });
-            var year2018            = graph.newVertex('tag', { label: '2018 schedule', gotoURI: 'https://fosdem.org/2018/schedule/track/graph/' });
+            var year2018            = graph.newVertex('tag', { label: '2018 schedule', gotoURI: 'https://fosdem.org/2018/schedule/track/graph_processing/' });
 
             graph.newEdge(FOSDEM, 'goto', FOSDEMWebsite);
             graph.newEdge(FOSDEM, 'goto', FOSDEMDevrooms);
