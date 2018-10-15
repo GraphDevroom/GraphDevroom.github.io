@@ -2,12 +2,12 @@
 <!-- saved from url=(0024)http://graphdevroom.org/ -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-    <title>FOSDEM GraphDevroom 2018</title>
+    <title>FOSDEM GraphDevroom 2019</title>
 
     <meta name="keywords" content="GraphDevroom">
-    <meta name="description" content="FOSDEM GraphDevroom 2018">
+    <meta name="description" content="FOSDEM GraphDevroom 2019">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+
 
     <link rel="stylesheet" type="text/css" href="assets/font-awesome-4.2.0.min.css">
     <link rel="stylesheet" type="text/css" href="assets/leaflet.css">
@@ -198,7 +198,7 @@
 
                     }
 
-                    console.log('Node selected: ' + JSON.stringify(node.data));
+                    console.log('Node selected: ' + JSON.stringify(node));
 
                 }
 
@@ -452,11 +452,11 @@
 
             springy.clear();
 
-            var FOSDEM              = graph.newVertex('text', { label: 'FOSDEM\'18' });
+            var FOSDEM              = graph.newVertex('text', { label: 'FOSDEM\'19' });
             var FOSDEMWebsite       = graph.newVertex('tag',  { label: 'website',  gotoURI: 'http://www.fosdem.org' });
-            var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2018/news/2017-10-04-accepted-developer-rooms/' });
-            var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2018/schedule/' });
-            var year2018            = graph.newVertex('tag', { label: '2018 schedule', gotoURI: 'https://fosdem.org/2018/schedule/track/graph_processing/' });
+            var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2019/news/2018-10-14-accepted-developer-rooms/' });
+            var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2019/schedule/' });
+            var year2019            = graph.newVertex('tag', { label: '2019 schedule', gotoURI: 'https://fosdem.org/2019/schedule/track/graph_processing/' });
 
             graph.newEdge(FOSDEM, 'goto', FOSDEMWebsite);
             graph.newEdge(FOSDEM, 'goto', FOSDEMDevrooms);
@@ -480,9 +480,8 @@
 
             var Twitter             = graph.newVertex('tag', { label: 'Twitter',      gotoURI: 'https://twitter.com/graphdevroom' });
             var GitHub              = graph.newVertex('tag', { label: 'GitHub',       gotoURI: 'https://github.com/graphdevroom' });
-            var EMail               = graph.newVertex('tag', { label: 'E-Mail',       gotoURI: 'mailto:fosdem2018@graphdevroom.org' });
+            var EMail               = graph.newVertex('tag', { label: 'E-Mail',       gotoURI: 'mailto:fosdem2019@graphdevroom.org' });
             var Google              = graph.newVertex('tag', { label: 'GoogleGroups', gotoURI: 'https://groups.google.com/d/forum/graphdevroom' });
-            var GooglePlus          = graph.newVertex('tag', { label: 'Google+',      gotoURI: 'https://plus.google.com/u/0/communities/114424455964265722048' });
             var YouTube             = graph.newVertex('tag', { label: 'YouTube',      gotoURI: 'http://www.youtube.com/graphprocessing' });
             var SlideShare          = graph.newVertex('tag', { label: 'SlideShare',   gotoURI: 'http://www.slideshare.net/graphdevroom' });
             var Etherpad            = graph.newVertex('tag', { label: 'Etherpad',     gotoURI: 'https://etherpad.wikimedia.org/p/GraphDevroom' });
@@ -491,7 +490,6 @@
             graph.newEdge(Contact, 'goto', GitHub);
             graph.newEdge(Contact, 'goto', EMail);
             graph.newEdge(Contact, 'goto', Google);
-            graph.newEdge(Contact, 'goto', GooglePlus);
             graph.newEdge(Contact, 'goto', YouTube);
             graph.newEdge(Contact, 'goto', SlideShare);
             graph.newEdge(Contact, 'goto', Etherpad);
@@ -501,7 +499,8 @@
             graph.newEdge(CfP,          'next', Team,           { color: 'rgba(110, 41, 127, 0.87)', label: "who we are",           directional: true });
             graph.newEdge(Team,         'next', Contact,        { color: 'rgba(110, 41, 127, 0.87)', label: "how to contact us",    directional: true });
 
-	    var year2017 = graph.newVertex('history', { label: '2017', gotoURI: 'https://archive.fosdem.org/2017/schedule/track/graph/' });
+            var year2018 = graph.newVertex('history', { label: '2018', gotoURI: 'https://archive.fosdem.org/2018/schedule/track/graph/' });
+            var year2017 = graph.newVertex('history', { label: '2017', gotoURI: 'https://archive.fosdem.org/2017/schedule/track/graph/' });
             var year2016 = graph.newVertex('history', { label: '2016', gotoURI: 'https://archive.fosdem.org/2016/schedule/track/graph_processing/' });
             var year2015 = graph.newVertex('history', { label: '2015', gotoURI: 'https://archive.fosdem.org/2015/schedule/track/graph_processing/' });
             var year2014 = graph.newVertex('history', { label: '2014', gotoURI: 'https://archive.fosdem.org/2014/schedule/track/graph_processing/' });
@@ -509,7 +508,8 @@
             var year2012 = graph.newVertex('history', { label: '2012', gotoURI: 'https://archive.fosdem.org/2012/schedule/track/graph_processing_devroom.html' });
             var year2011 = graph.newVertex('history', { label: '2011', gotoURI: 'https://archive.fosdem.org/2011/schedule/track/data_analytics_devroom.html' });
 
-	    graph.newEdge(GraphDevroom, 'lookahead', year2018);
+	          graph.newEdge(GraphDevroom, 'lookahead', year2019);
+            graph.newEdge(GraphDevroom, 'lookback', year2018);
             graph.newEdge(GraphDevroom, 'lookback', year2017);
             graph.newEdge(GraphDevroom, 'lookback', year2016);
             graph.newEdge(GraphDevroom, 'lookback', year2015);
@@ -533,9 +533,9 @@
       </div>
 
       <div id="text">
-          <span id="title">FOSDEM<span class="lila high">'18</span> GraphDevroom</span><br>
-          <span id="where">H.2214, Université Libre de Bruxelles, Brussels, Belgium</span><br>
-          <span id="when">Sat, 03 February 2018</span>
+          <span id="title">FOSDEM<span class="lila high">'19</span> GraphDevroom</span><br>
+          <span id="where">Room TBA, Université Libre de Bruxelles, Brussels, Belgium</span><br>
+          <span id="when">Sat, 02 February 2019</span>
       </div>
 
     </div>
@@ -552,25 +552,25 @@
 
         <h1>Call for Participation</h1>
 
-        <p>We are happy to announce the <span class="highlight">6th edition of the Graph Devroom</span> 
-        co-located with <a href="https://fosdem.org/2018">FOSDEM 2018</a> in Room TBA at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.
-        FOSDEM is an annually software developers meeting attended by 
-        over 8000+ free and open source enthusiasts from all over the world. The 
-        devroom will take place on <span class="highlight">Saturday, 3. February 2018</span> with a welcome at 
+        <p>We are happy to announce the <span class="highlight">9th edition of the Graph Devroom</span>
+        co-located with <a href="https://fosdem.org/2019">FOSDEM 2019</a> in Room TBA at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.
+        FOSDEM is an annually software developers meeting attended by
+        over 8000+ free and open source enthusiasts from all over the world. The
+        devroom will take place on <span class="highlight">Saturday, 2 February 2019</span> with a welcome at
         10 a.m., and <span class="highlight">talks from 10:30 a.m. till 7 p.m.</span>.</p>
 
         <p>For the last years graph processing systems have gained a clear
-        impact for processing complex, semi-structured, interrelated and 
-        distributed data sets. Thanks to many high quality open source 
+        impact for processing complex, semi-structured, interrelated and
+        distributed data sets. Thanks to many high quality open source
         implementations, comprehensive vendor solutions and outstanding community support,
-	Graph-based systems have become a regular tool in developer's toolboxes. New 
+	Graph-based systems have become a regular tool in developer's toolboxes. New
 	implementations and initiatives are announced regularly by players of all sizes.
-        The more important it is for developers to stay informed and our Graph Devroom 
+        The more important it is for developers to stay informed and our Graph Devroom
         is a great opportunity to learn from the experts.</p>
 
-        <p>In previous devrooms we saw many great presentations and demos. Deep discussions 
-	took place during and after the talks. Therefore, also in 2018 we will again give 
-	creators and maintainers of graph solutions, researchers, geeks and open source hackers the 
+        <p>In previous devrooms we saw many great presentations and demos. Deep discussions
+	took place during and after the talks. Therefore, also in 2019 we will again give
+	creators and maintainers of graph solutions, researchers, geeks and open source hackers the
         possibility of presenting their latest work to an attentive audience. This includes:</p>
 
         <ul>
@@ -601,18 +601,18 @@
 
         <h1>Submit your Idea</h1>
 
-        <p>Convinced? Interested in giving a talk or presenting a demo? 
+        <p>Convinced? Interested in giving a talk or presenting a demo?
         <span class="highlight">We are looking for high quality technical (non-marketing) submissions</span>,
-        ranging from principles to practice and interesting to attendees with widely 
-        different backgrounds. Talks should be 20 to 30 minutes, lightning talks 
-        5 to 10 minutes and consist of a presentation supported by slides, videos 
-        and/or demos. Any degree of interactivity is highly welcome. We also 
-        welcome other activity proposals different from “traditional” project 
+        ranging from principles to practice and interesting to attendees with widely
+        different backgrounds. Talks should be 20 to 30 minutes, lightning talks
+        5 to 10 minutes and consist of a presentation supported by slides, videos
+        and/or demos. Any degree of interactivity is highly welcome. We also
+        welcome other activity proposals different from “traditional” project
         presentations and talks. <span class="highlight">All submissions should be
         based on free and open software solutions or free and open APIs.</span>
         <span class="highlight">All accepted presentations will be recorded.</span></p>
 
-        <p>To submit a talk, please go to the <a href="https://penta.fosdem.org/submission/FOSDEM18">FOSDEM submission system</a>
+        <p>To submit a talk, please go to the <a href="https://penta.fosdem.org/submission/FOSDEM19">FOSDEM submission system</a>
         and follow the instructions. If you previously spoke at FOSDEM, chances
         are high that you already have an account! If you forgot your password,
         do just reset it. If not, follow the instructions to create an account.
@@ -644,7 +644,7 @@
         </ul>
 
         <p>To avoid any kind of misunderstandings and lost submissions please send also a
-        short e-mail to <a href="mailto:fosdem2018@graphdevroom.org">fosdem2018@graphdevroom.org</a>
+        short e-mail to <a href="mailto:fosdem2019@graphdevroom.org">fosdem2019@graphdevroom.org</a>
         and wait for our confirmation.</p>
 
         <div class="textareaclose">
@@ -663,11 +663,10 @@
 
         <table style="width: 100%">
           <tbody>
-          <tr><td>Submission deadline              </td><td style="white-space: nowrap">26. Nov 2017</td></tr>
-          <tr><td>Notification of accepted speakers</td><td style="white-space: nowrap">01. Dec 2017</td></tr>
-          <tr><td>Preliminary Schedule             </td><td style="white-space: nowrap">08. Dec 2017</td></tr>
-          <tr><td>Publication of the final schedule</td><td style="white-space: nowrap">13. Dec 2017</td></tr>
-          <tr><td>Devroom day (Room TBA)           </td><td style="white-space: nowrap">03. Feb 2018</td></tr>
+          <tr><td>Submission deadline              </td><td style="white-space: nowrap">02. Dec 2018</td></tr>
+          <tr><td>Notification of accepted speakers</td><td style="white-space: nowrap">09. Dec 2018</td></tr>
+          <tr><td>Schedule Publication             </td><td style="white-space: nowrap">16. Dec 2018</td></tr>
+          <tr><td>Devroom day (Room TBA)           </td><td style="white-space: nowrap">02. Feb 2019</td></tr>
         </tbody></table>
 
         <div class="textareaclose">
@@ -684,13 +683,12 @@
 
         <h1>The Orgteam</h1>
 
-        <p>can be reached via <a href="mailto:fosdem2018@graphdevroom.org">fosdem2018@graphdevroom.org</a>.</p>
+        <p>can be reached via <a href="mailto:fosdem2019@graphdevroom.org">fosdem2019@graphdevroom.org</a>.</p>
 
         <ul>
             <li>Michael Hunger, Caretaker Neo4j User Community</li>
-            <li>Achim Friedland, Founder of GraphDefined GmbH</li>
             <li>Martin Junghanns, University of Leipzig, Neo4j</li>
-	    <li>Max Kiessling, Neo4j</li>
+            <li>Benoit Simard, Neo4j</li>
         </ul>
 
         <p>Any kind of ideas, suggestions and helping hands are <a href="https://etherpad.wikimedia.org/p/GraphDevroom" target="_blank">always</a> welcome.</p>
@@ -705,16 +703,14 @@
 
         <h1>Stay in Contact</h1>
 
-        <p>In order to stay in contact and be updated with the latest news of the 
+        <p>In order to stay in contact and be updated with the latest news of the
         event, you can either go to Twitter and follow <a href="https://twitter.com/graphdevroom" target="_blank">@GraphDevroom</a>
         or search for #graphdevroom, or goto Google and subscribe to our
-        <a href="https://groups.google.com/d/forum/graphdevroom" target="_blank">Google Group</a>
-        or become a member of our <a href="https://plus.google.com/u/0/communities/114424455964265722048" target="_blank">Google+</a> community.</p>
+        <a href="https://groups.google.com/d/forum/graphdevroom" target="_blank">Google Group</a>.</p>
 
-        <p>Impressions, recorded talks and slides from the last years are available 
-        at our website, at <a href="http://www.youtube.com/graphprocessing" target="_blank">YouTube</a>
-        within our <a href="https://plus.google.com/u/0/communities/114424455964265722048" target="_blank">Google+</a>
-        community or at <a href="http://www.slideshare.net/graphdevroom" target="_blank">SlideShare</a>.</p>
+        <p>Impressions, recorded talks and slides from the last years are available
+        on <a href="http://www.youtube.com/graphprocessing" target="_blank">YouTube</a>
+        and <a href="http://www.slideshare.net/graphdevroom" target="_blank">SlideShare</a>.</p>
 
         <div class="textareaclose">
             <a href="javascript:HideTextarea('Contact')"><i class="fa fa-times"></i></a>
@@ -745,8 +741,8 @@
         <a href="http://graphdevroom.org/OpenPGP-Keys/mail@graphdevroom.org.key" target="_blank" style="font-size:72%"><i class="fa fa-lock       fa-2x"></i></a>
     </div>
 
-  
-  
+
+
 
 
 <span id="buffer-extension-hover-button" style="display: none;position: absolute;z-index: 8675309;width: 100px;height: 25px;background-image: url(chrome-extension://noojglkidnpfjbincgijbaiedldjfbhh/data/shared/img/buffer-hover-icon@2x.png);background-size: 100px 25px;opacity: 0.9;cursor: pointer;"></span></body></html>
