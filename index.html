@@ -1,748 +1,194 @@
-<!DOCTYPE html>
-<!-- saved from url=(0024)http://graphdevroom.org/ -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-    <title>FOSDEM GraphDevroom 2019</title>
-
-    <meta name="keywords" content="GraphDevroom">
-    <meta name="description" content="FOSDEM GraphDevroom 2019">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-
-    <link rel="stylesheet" type="text/css" href="assets/font-awesome-4.2.0.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/leaflet.css">
-    <link rel="stylesheet" type="text/css" href="assets/L.Control.Locate.css">
-    <link rel="stylesheet" type="text/css" href="assets/style.css">
-
-    <script type="text/javascript" src="assets/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="assets/leaflet.js"></script><style type="text/css"></style>
-    <script type="text/javascript" src="assets/L.Control.Locate.js"></script>
-    <script type="text/javascript" src="assets/default.js"></script>
-    <script type="text/javascript" src="assets/vanaheimr.balder.js"></script>
-    <script type="text/javascript" src="assets/vanaheimr.loki.js"></script>
-
-    <script>
-
-        // Source: https://gist.github.com/DavidBruant/1016007
-        NodeList.      prototype.forEach = Array.prototype.forEach;
-        HTMLCollection.prototype.forEach = Array.prototype.forEach;
-
-        var CurrentGraph       = 'none';
-        var springy            = null;
-        var map,mapbox         = null;
-
-
-
-        // Show the given text area
-        function ShowTextarea(name) {
-
-            HideTextareas('.textarea');
-
-            var ShowDiv = document.getElementById(name);
-
-            if (ShowDiv != null)
-                ShowDiv.style.display = "block";
-
-        }
-
-        // Hide a single text area
-        function HideTextarea(name) {
-
-            var ShowDiv = document.getElementById(name);
-
-            if (ShowDiv != null)
-                ShowDiv.style.display = "none";
-
-        }
-
-        // Hide all matching text areas
-        function HideTextareas(name) {
-
-            document.querySelectorAll(name).forEach(function (textarea) {
-                textarea.style.display = "none";
-            });
-
-        }
-
-        // A click on the map
-        function ClickOnMap() {
-
-            if (document.getElementById('map').style.zIndex = 1)
-                ShowMap();
-            else
-                HideMap();
-
-        }
-
-        // Show and enlarge the leaflet map
-        function ShowMap() {
-
-            HideTextareas('.textarea');
-
-            var MapDiv = document.getElementById('map');
-            MapDiv.style.borderColor  = 'rgba(110, 41, 127, 0.37)';
-            MapDiv.style.zIndex       = 10;
-            MapDiv.style.width        = '65%';
-            MapDiv.style.left         = '31%';
-            MapDiv.style.height       = 'calc(60% - 1px)';
-            MapDiv.style.transform    = 'rotate(-1.5deg)';
-            MapDiv.style.boxShadow    = '4px 4px 4px rgba(100, 100, 100, 0.7)';
-
-            document.getElementById('MapBackground').style.display  = "block";
-            document.getElementById('OpenData1').    style.display  = "block";
-
-            map.invalidateSize();
-
-        }
-
-        // Shrink and hide the leaflet map
-        function HideMap() {
-
-            var MapDiv = document.getElementById('map');
-            MapDiv.style.borderColor  = 'rgba(255, 255, 255, 1.00)';
-            MapDiv.style.zIndex       = 1;
-            MapDiv.style.width        = '35%';
-            MapDiv.style.left         = '61%';
-            MapDiv.style.height       = 'calc(30% - 1px)';
-            MapDiv.style.transform    = 'rotate(-3deg)';
-            MapDiv.style.boxShadow    = '2px 2px 2px rgba(100, 100, 100, 0.7)';
-
-            document.getElementById('MapBackground').style.display  = "none";
-            document.getElementById('OpenData1').    style.display  = "none";
-
-            map.invalidateSize();
-
-        }
-
-        // Fix for graph layout errors whenever the size of the canvas changed!
-        function FixGraphLayout() {
-
-            var gf = document.getElementById('graphframe');
-            var gc = document.getElementById('graphcanvas');
-
-            if (gf != null && gc != null) {
-
-                if (gc.height != gf.clientHeight)
-                    gc.height  = gf.clientHeight;
-
-                if (gc.width  != gf.clientWidth)
-                    gc.width   = gf.clientWidth;
-
-            }
-
-        }
-
-
-        // Get query hash and parameters
-        var QueryHash        = window.location.hash.substr(1).replace(/[^a-zA-Z0-9]/gi, '');
-        var QueryParameters  = {};
-
-        window.location.search.substr(1).split('&').forEach(function (p) {
-
-            if (p != "") {
-
-                var param = p.split('=', 2);
-                var key = param[0].replace(/[^a-zA-Z0-9_]/g, "").toLowerCase();
-
-                if (QueryParameters[key] == undefined)
-                    QueryParameters[key] = new Array();
-
-                if (p.length == 1)
-                    QueryParameters[key].push("");
-                else
-                    QueryParameters[key].push(decodeURIComponent(param[1].replace(/\+/g, " ")));
-
-            }
-
-        });
-
-        var graph            = new Springy.Graph();
-
-
-
-        // onLoad...
-        $(document).ready(function() {
-
-            var springy = window.springy = jQuery('#graphcanvas').springy({
-                graph: graph,
-                nodeSelected: function (node) {
-
-                    if (node.VertexLabel == 'tag' || node.VertexLabel == 'history') {
-
-                        if (node.data.gotoURI !== undefined)
-                            window.open(node.data.gotoURI, '_blank');
-
-                        if (node.data.javascript !== undefined) {
-                            window[node.data.javascript]();
-                        }
-
-                        var elems = document.getElementsByClassName("schedule");
-
-                        for (var timeIndex = 0; timeIndex < elems.length; ++timeIndex) {
-                            elems[timeIndex].style.display = "none";
-                        }
-
-                        elems = document.getElementsByClassName(node.data.label);
-
-                        for (var timeIndex = 0; timeIndex < elems.length; ++timeIndex) {
-                            elems[timeIndex].style.display = "";
-                        }
-
-                        FixGraphLayout();
-
-                    }
-
-                    else if (node.VertexLabel == 'text') {
-                        if (node.data.textarea !== undefined)
-                            ShowTextarea(node.data.textarea);
-
-                    }
-
-                    console.log('Node selected: ' + JSON.stringify(node));
-
-                }
-
-            });
-
-            ShowHomeGraph();
-
-            var InfoBox      = null;
-            var InfoFeature  = null;
-            var GeoJSONLayer = {};
-            var GeoJSONLayer2 = {};
-
-            //- Create the leaflet map ----------------------------------------------------------------------------------------
-
-            map = L.map('map').setView([50.8136544, 4.3820177], 15);
-
-            mapbox = L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-                id: 'examples.map-20v6611k',
-                maxZoom: 18,
-                attribution: '<a href="http://openstreetmap.org">OpenStreetMap</a> ' +
-                             '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                             '<a href="http://mapbox.com">Mapbox</a> Imagery'
-            }).addTo(map);
-
-
-            //- Button to get the users location ------------------------------------------------------------------------------
-
-            L.control.locate({
-
-                position:                   'topleft',
-                drawCircle:                 true,                       // controls whether a circle is drawn that shows the uncertainty about the location
-                follow:                     false,                      // follow the user's location
-                setView:                    true,                       // automatically sets the map view to the user's location, enabled if `follow` is true
-                keepCurrentZoomLevel:       false,                      // keep the current map zoom level when displaying the user's location. (if `false`, use maxZoom)
-                remainActive:               false,                      // if true locate control remains active on click even if the user's location is in view.
-                markerClass:                L.circleMarker,             // L.circleMarker or L.marker
-                circleStyle:                {},                         // change the style of the circle around the user's location
-                markerStyle:                {},
-                followCircleStyle:          {},                         // set difference for the style of the circle around the user's location while following
-                followMarkerStyle:          {},
-                icon:                       'fa fa-map-marker',         // class for icon, fa-location-arrow or fa-map-marker
-                iconLoading:                'fa fa-spinner fa-spin',    // class for loading icon
-                circlePadding:              [0, 0],                     // padding around accuracy circle, value is passed to setBounds
-                metric:                     true,                       // use metric or imperial units
-                onLocationError:            function (err) { alert(err.message) },  // define an error callback function
-                onLocationOutsideMapBounds: function (context) { // called when outside map boundaries
-                    alert(context.options.strings.outsideMapBoundsMsg);
-                },
-                showPopup: true, // display a popup when the user click on the inner marker
-                strings: {
-                    title:                  "Show me where I am",  // title of the locate control
-                    popup:                  "You are within {distance} {unit} from this point",  // text to appear if user clicks on circle
-                    outsideMapBoundsMsg:    "You seem located outside the boundaries of the map" // default message for onLocationOutsideMapBounds
-                },
-                locateOptions:              {}  // define location options e.g enableHighAccuracy: true or maxZoom: 10
-
-            }).addTo(map);
-
-
-            //- Add a small info box for details on map features --------------------------------------------------------------
-
-            InfoBox = L.control({ position: 'bottomleft' });
-
-            InfoBox.onAdd = function (map) {
-                this._div = L.DomUtil.create('div', 'info');
-                this.update();
-                return this._div;
-            };
-
-            // Method used to update the control based on the given feature
-            InfoBox.update = function (feature) {
-
-                InfoFeature = feature;
-
-                this._div.innerHTML =
-
-                    (feature ? '<b>' + feature.properties.name + '</b>' +
-                               ((feature.properties.link != undefined) ? '<br /><a href=\"' + feature.properties.link + '\" target=\"_blank\">' : '') +
-                               ((feature.properties.info != undefined) ? feature.properties.info : '') +
-                               ((feature.properties.link != undefined) ? '</a>' : '')
-                             : 'Hover over a feature to get more information');
-
-            };
-
-            InfoBox.addTo(map);
-
-
-            //- Create a GeoJSON layer ---------------------------------------------------------------------------------------
-
-            // Zoom the map to the given feature
-            function zoomToFeature(e) {
-                map.fitBounds(e.target.getBounds());
-            }
-
-            function highlightFeature(e) {
-
-                InfoBox.update(e.target.feature);
-
-                var MapObject = e.target;
-
-                // e.g. not for point features...
-                if (MapObject.setStyle !== undefined)
-                {
-
-                    MapObject.setStyle({
-                        weight:      2,
-                        color:       '#DDCC33',
-                        dashArray:   '',
-                        fillOpacity: 0.7
-                    });
-
-                    if (!L.Browser.ie && !L.Browser.opera) {
-                        MapObject.bringToFront();
-                    }
-
-                }
-
-            }
-
-            function resetHighlight(e) {
-                InfoBox.update();
-                GeoJSONLayer.resetStyle(e.target);
-            }
-
-            function GeoJSONStyle(feature) {
-
-                if (feature.properties.IsVoronoi)
-
-                    return {
-                        //fillColor:    GetVoronoiColor(AggregatorFuncion(feature.properties)),
-                        weight:       1,
-                        opacity:      1,
-                        color:        'grey',
-                        dashArray:    '3',
-                        fillOpacity:  0.6
-                    };
-
-                else return {
-                    weight:       0.5,
-                    opacity:      0.6,
-                    color:        '#2880ca', //'#ad3092',
-                    fillOpacity:  0.7
-                };
-
-            }
-
-            GeoJSONLayer          = L.geoJson().addTo(map);
-            GeoJSONLayer.id       = "GeoJSON";
-            GeoJSONLayer.options  = {
-
-                style: GeoJSONStyle,
-
-                onEachFeature: function (feature, layer) {
-                    layer.on({
-                        mouseover: highlightFeature,
-                        mouseout:  resetHighlight,
-                        dblclick:  zoomToFeature
-                    });
-                },
-
-            };
-
-            GeoJSONLayer2          = L.geoJson().addTo(map);
-            GeoJSONLayer2.id       = "InterestingPlaces_GeoJSON";
-            GeoJSONLayer2.options  = {
-
-                style: GeoJSONStyle,
-
-                onEachFeature: function (feature, layer) {
-                    layer.on({
-                        mouseover: highlightFeature,
-                        mouseout: resetHighlight,
-                        //click:     highlightFeature,
-                        //dblclick:  zoomToFeature
-                    });
-                },
-
-                // Transform a GeoJSON point into some leaflet shape
-                //pointToLayer: function (feature, latlng) {
-                //    return L.featureGroup([
-                //        L.circle(latlng, 23, {
-                //            startAngle: 0,
-                //            stopAngle:  120,
-                //            fillColor:  GetVoronoiColor(feature.properties.U1),
-                //        }),
-                //        L.circle(latlng, 23, {
-                //            startAngle: 120,
-                //            stopAngle:  240,
-                //            fillColor:  GetVoronoiColor(feature.properties.U2),
-                //        }),
-                //        L.circle(latlng, 23, {
-                //            startAngle: 240,
-                //            stopAngle:  360,
-                //            fillColor:  GetVoronoiColor(feature.properties.U3),
-                //        })]);
-
-                //}
-
-            };
-
-
-            //- Add the FOSDEM building and zoom to them ---------------------------------------------------------------------
-
-            $.getJSON('/geojson/FOSDEM.geojson', function (data) {
-
-                data.features.forEach(function (feature, index, array) {
-                    GeoJSONLayer.addData(feature).addTo(map);
-                });
-
-                map.fitBounds(GeoJSONLayer.getBounds());
-
-            });
-
-            $.getJSON('/geojson/InterestingPlaces.geojson', function (data) {
-
-                data.features.forEach(function (feature, index, array) {
-
-                    GeoJSONLayer2.addData(feature).
-                                  // Note: Will bind to all features on that layer!
-                                  bindPopup(
-                                     '<b>' + feature.properties.name + '</b>' +
-                                           ((feature.properties.link != undefined) ? '<br /><a href=\"' + feature.properties.link + '\" target=\"_blank\">' : '') +
-                                           ((feature.properties.info != undefined) ? feature.properties.info : '') +
-                                           ((feature.properties.link != undefined) ? '</a>' : '')
-                                  ).
-                                  addTo(map);
-
-                });
-
-            });
-
-            //function onClickOnMap(e) {
-            //    alert("You clicked the map at " + e.latlng);
-            //}
-
-            //map.on('click', onClickOnMap);
-
-            //- http://www.graphdevroom.org/#CfP will show the CfP layer -----------------------------------------------------
-
-            ShowTextarea(QueryHash);
-
-        });
-
-        function ShowHomeGraph() {
-
-            if (CurrentGraph == 'HomeGraph')
-                return;
-
-            FixGraphLayout();
-            CurrentGraph = 'HomeGraph';
-
-            springy.clear();
-
-            var FOSDEM              = graph.newVertex('text', { label: 'FOSDEM\'19' });
-            var FOSDEMWebsite       = graph.newVertex('tag',  { label: 'website',  gotoURI: 'http://www.fosdem.org' });
-            var FOSDEMDevrooms      = graph.newVertex('tag',  { label: 'devrooms', gotoURI: 'https://fosdem.org/2019/news/2018-10-14-accepted-developer-rooms/' });
-            var FOSDEMSchedule      = graph.newVertex('tag',  { label: 'schedule', gotoURI: 'https://fosdem.org/2019/schedule/' });
-            var year2019            = graph.newVertex('tag', { label: '2019 schedule', gotoURI: 'https://fosdem.org/2019/schedule/track/graph_processing/' });
-
-            graph.newEdge(FOSDEM, 'goto', FOSDEMWebsite);
-            graph.newEdge(FOSDEM, 'goto', FOSDEMDevrooms);
-            graph.newEdge(FOSDEM, 'goto', FOSDEMSchedule);
-
-
-            var GraphDevroom        = graph.newVertex('text', { label: 'GraphDevroom' });
-            var CfP                 = graph.newVertex('text', { label: 'Call for Participation',  textarea:   'CfP'         });
-            var Submissions         = graph.newVertex('text', { label: 'Submit your idea',        textarea:   'Submissions' });
-            var Dates               = graph.newVertex('text', { label: 'Important Dates',         textarea:   'Dates'       });
-            var Team                = graph.newVertex('text', { label: 'Team',                    textarea:   'Team'        });
-            var Contact             = graph.newVertex('text', { label: 'Contact',                 textarea:   'Contact'     });
-            var OpenGeoData         = graph.newVertex('tag',  { label: 'Open GeoData',            javascript: 'ShowMap'   });
-
-            graph.newEdge(GraphDevroom, 'next', FOSDEM,      { label: "is part of" });
-            graph.newEdge(GraphDevroom, 'next', CfP,         { label: "CfP",              weight: 2.5 });
-            graph.newEdge(GraphDevroom, 'next', Team,        { label: "who we are",       weight: 2.5 });
-            graph.newEdge(GraphDevroom, 'next', Contact,     { label: "how to contact us" });
-            graph.newEdge(GraphDevroom, 'goto', OpenGeoData, { label: "explore",          color: "rgba(110, 41, 127, 0.87)" });
-
-
-            var Twitter             = graph.newVertex('tag', { label: 'Twitter',      gotoURI: 'https://twitter.com/graphdevroom' });
-            var GitHub              = graph.newVertex('tag', { label: 'GitHub',       gotoURI: 'https://github.com/graphdevroom' });
-            var EMail               = graph.newVertex('tag', { label: 'E-Mail',       gotoURI: 'mailto:fosdem2019@graphdevroom.org' });
-            var Google              = graph.newVertex('tag', { label: 'GoogleGroups', gotoURI: 'https://groups.google.com/d/forum/graphdevroom' });
-            var YouTube             = graph.newVertex('tag', { label: 'YouTube',      gotoURI: 'http://www.youtube.com/graphprocessing' });
-            var SlideShare          = graph.newVertex('tag', { label: 'SlideShare',   gotoURI: 'http://www.slideshare.net/graphdevroom' });
-            var Etherpad            = graph.newVertex('tag', { label: 'Etherpad',     gotoURI: 'https://etherpad.wikimedia.org/p/GraphDevroom' });
-
-            graph.newEdge(Contact, 'goto', Twitter);
-            graph.newEdge(Contact, 'goto', GitHub);
-            graph.newEdge(Contact, 'goto', EMail);
-            graph.newEdge(Contact, 'goto', Google);
-            graph.newEdge(Contact, 'goto', YouTube);
-            graph.newEdge(Contact, 'goto', SlideShare);
-            graph.newEdge(Contact, 'goto', Etherpad);
-
-            graph.newEdge(CfP,          'next', Submissions,    { color: 'rgba(110, 41, 127, 0.87)', label: "convinced?",           directional: true });
-            graph.newEdge(CfP,          'next', Dates,          { color: 'rgba(110, 41, 127, 0.87)', label: "until when?",          directional: true });
-            graph.newEdge(CfP,          'next', Team,           { color: 'rgba(110, 41, 127, 0.87)', label: "who we are",           directional: true });
-            graph.newEdge(Team,         'next', Contact,        { color: 'rgba(110, 41, 127, 0.87)', label: "how to contact us",    directional: true });
-
-            var year2018 = graph.newVertex('history', { label: '2018', gotoURI: 'https://archive.fosdem.org/2018/schedule/track/graph/' });
-            var year2017 = graph.newVertex('history', { label: '2017', gotoURI: 'https://archive.fosdem.org/2017/schedule/track/graph/' });
-            var year2016 = graph.newVertex('history', { label: '2016', gotoURI: 'https://archive.fosdem.org/2016/schedule/track/graph_processing/' });
-            var year2015 = graph.newVertex('history', { label: '2015', gotoURI: 'https://archive.fosdem.org/2015/schedule/track/graph_processing/' });
-            var year2014 = graph.newVertex('history', { label: '2014', gotoURI: 'https://archive.fosdem.org/2014/schedule/track/graph_processing/' });
-            var year2013 = graph.newVertex('history', { label: '2013', gotoURI: 'https://archive.fosdem.org/2013/schedule/track/graph_processing/' });
-            var year2012 = graph.newVertex('history', { label: '2012', gotoURI: 'https://archive.fosdem.org/2012/schedule/track/graph_processing_devroom.html' });
-            var year2011 = graph.newVertex('history', { label: '2011', gotoURI: 'https://archive.fosdem.org/2011/schedule/track/data_analytics_devroom.html' });
-
-	          graph.newEdge(GraphDevroom, 'lookahead', year2019);
-            graph.newEdge(GraphDevroom, 'lookback', year2018);
-            graph.newEdge(GraphDevroom, 'lookback', year2017);
-            graph.newEdge(GraphDevroom, 'lookback', year2016);
-            graph.newEdge(GraphDevroom, 'lookback', year2015);
-            graph.newEdge(GraphDevroom, 'lookback', year2014);
-            graph.newEdge(GraphDevroom, 'lookback', year2013);
-            graph.newEdge(GraphDevroom, 'lookback', year2012);
-            graph.newEdge(GraphDevroom, 'lookback', year2011);
-
-        }
-
-     </script>
-
-  </head>
-
-  <body onresize="FixGraphLayout()">
-
-    <div id="logo">
-
-      <div id="fosdemlogo">
-          <img src="assets/FOSDEM-vertex-transparent.png">
-      </div>
-
-      <div id="text">
-          <span id="title">FOSDEM<span class="lila high">'19</span> GraphDevroom</span><br>
-          <span id="where">Room TBA, Université Libre de Bruxelles, Brussels, Belgium</span><br>
-          <span id="when">Sat, 02 February 2019</span>
-      </div>
-
-    </div>
-
-    <div id="MapBackground" onclick="javascript:HideMap()"></div>
-
-    <div id="map" onclick="javascript:ClickOnMap()" class="leaflet-container leaflet-retina leaflet-fade-anim" tabindex="0"><div class="leaflet-map-pane" style="transform: translate3d(16px, -17px, 0px);"><div class="leaflet-tile-pane"><div class="leaflet-layer"><div class="leaflet-tile-container"></div><div class="leaflet-tile-container leaflet-zoom-animated"></div></div></div><div class="leaflet-objects-pane"><div class="leaflet-shadow-pane"><img src="assets/marker-shadow.png" class="leaflet-marker-shadow leaflet-zoom-animated" style="margin-left: -12px; margin-top: -41px; width: 41px; height: 41px; transform: translate3d(-363px, -1213px, 0px);"></div><div class="leaflet-overlay-pane"><svg class="leaflet-zoom-animated" width="700" height="175" viewBox="-72 3 700 175" style="transform: translate3d(-72px, 3px, 0px);"><g><path stroke-linejoin="round" stroke-linecap="round" fill-rule="evenodd" stroke="#2880ca" stroke-opacity="0.6" stroke-width="0.5" fill="#2880ca" fill-opacity="0.7" class="leaflet-clickable" d="M266 89L271 100L238 116L233 105z"></path></g><g><path stroke-linejoin="round" stroke-linecap="round" fill-rule="evenodd" stroke="#2880ca" stroke-opacity="0.6" stroke-width="0.5" fill="#2880ca" fill-opacity="0.7" class="leaflet-clickable" d="M268 120L273 130L262 135L257 125z"></path></g><g><path stroke-linejoin="round" stroke-linecap="round" fill-rule="evenodd" stroke="#2880ca" stroke-opacity="0.6" stroke-width="0.5" fill="#2880ca" fill-opacity="0.7" class="leaflet-clickable" d="M310 94L316 107L294 117L308 145L329 134L335 147L309 160L284 106z"></path></g><g><path stroke-linejoin="round" stroke-linecap="round" fill-rule="evenodd" stroke="#2880ca" stroke-opacity="0.6" stroke-width="0.5" fill="#2880ca" fill-opacity="0.7" class="leaflet-clickable" d="M290 23L298 40L288 45L280 28z"></path></g><g><path stroke-linejoin="round" stroke-linecap="round" fill-rule="evenodd" stroke="#2880ca" stroke-opacity="0.6" stroke-width="0.5" fill="#2880ca" fill-opacity="0.7" class="leaflet-clickable" d="M237 80L232 88L229 89L232 86L229 81L221 83L232 105L239 100L235 93L243 94L245 93L248 87L245 82L239 81z"></path></g></svg></div><div class="leaflet-marker-pane"><img src="assets/marker-icon-2x.png" class="leaflet-marker-icon leaflet-zoom-animated leaflet-clickable" tabindex="0" style="margin-left: -12px; margin-top: -41px; width: 25px; height: 41px; transform: translate3d(-363px, -1213px, 0px); z-index: -1213;"></div><div class="leaflet-popup-pane"></div></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="http://graphdevroom.org/#" title="Zoom in">+</a><a class="leaflet-control-zoom-out" href="http://graphdevroom.org/#" title="Zoom out">-</a></div><div class="leaflet-control-locate leaflet-bar leaflet-control"><a class="leaflet-bar-part leaflet-bar-part-single" href="http://graphdevroom.org/#" title="Show me where I am"><span class="fa fa-map-marker"></span></a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"><div class="info leaflet-control">Hover over a feature to get more information</div></div><div class="leaflet-bottom leaflet-right"><div class="leaflet-control-attribution leaflet-control"><a href="http://leafletjs.com/" title="A JS library for interactive maps">Leaflet</a> | <a href="http://openstreetmap.org/">OpenStreetMap</a> <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, <a href="http://mapbox.com/">Mapbox</a> Imagery</div></div></div></div>
-
-    <div id="photos">
-        <img src="assets/photo0001.jpg">
-    </div>
-
-    <div id="CfP" style="display: none; padding-bottom: 40px" class="textarea">
-
-        <h1>Call for Participation</h1>
-
-        <p>We are happy to announce the <span class="highlight">9th edition of the Graph Devroom</span>
-        co-located with <a href="https://fosdem.org/2019">FOSDEM 2019</a> in Room TBA at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.
-        FOSDEM is an annually software developers meeting attended by
-        over 8000+ free and open source enthusiasts from all over the world. The
-        devroom will take place on <span class="highlight">Saturday, 2 February 2019</span> with a welcome at
-        10 a.m., and <span class="highlight">talks from 10:30 a.m. till 7 p.m.</span>.</p>
-
-        <p>For the last years graph processing systems have gained a clear
-        impact for processing complex, semi-structured, interrelated and
-        distributed data sets. Thanks to many high quality open source
-        implementations, comprehensive vendor solutions and outstanding community support,
-	Graph-based systems have become a regular tool in developer's toolboxes. New
-	implementations and initiatives are announced regularly by players of all sizes.
-        The more important it is for developers to stay informed and our Graph Devroom
-        is a great opportunity to learn from the experts.</p>
-
-        <p>In previous devrooms we saw many great presentations and demos. Deep discussions
-	took place during and after the talks. Therefore, also in 2019 we will again give
-	creators and maintainers of graph solutions, researchers, geeks and open source hackers the
-        possibility of presenting their latest work to an attentive audience. This includes:</p>
-
-        <ul>
-          <li>Graph databases, RDF stores and specialized network databases</li>
-          <li>Graph Query Languages (e.g. (open)Cypher, GraphQL or SPARQL) and user-friendly APIs (e.g. Gremlin)</li>
-          <li>(Distributed) Graph Processing / Analytics Frameworks</li>
-          <li>Graph Streaming and its applications</li>
-          <li>Semantic Graphs (RDF) / Knowledge Graphs</li>
-          <li>Benchmarks</li>
-          <li>(Large-Scale) Graph Visualization</li>
-          <li>Graphs and the Internet-of-Things</li>
-          <li>Real-life application of graph processing including industry experience</li>
-        </ul>
-
-        <p>This list is not closed, other related topics are always welcome.</p>
-
-        <div class="textareaclose">
-            <a href="javascript:HideTextarea('CfP')"><i class="fa fa-times"></i></a>
-        </div>
-
-        <div class="nexttextarea">
-            <a href="javascript:ShowTextarea('Submissions')">Submit your idea <i class="fa fa-arrow-right"></i></a>
-        </div>
-
-    </div>
-
-    <div id="Submissions" style="display: none; padding-bottom: 40px" class="textarea">
-
-        <h1>Submit your Idea</h1>
-
-        <p>Convinced? Interested in giving a talk or presenting a demo?
-        <span class="highlight">We are looking for high quality technical (non-marketing) submissions</span>,
-        ranging from principles to practice and interesting to attendees with widely
-        different backgrounds. Talks should be 20 to 30 minutes, lightning talks
-        5 to 10 minutes and consist of a presentation supported by slides, videos
-        and/or demos. Any degree of interactivity is highly welcome. We also
-        welcome other activity proposals different from “traditional” project
-        presentations and talks. <span class="highlight">All submissions should be
-        based on free and open software solutions or free and open APIs.</span>
-        <span class="highlight">All accepted presentations will be recorded.</span></p>
-
-        <p>To submit a talk, please go to the <a href="https://penta.fosdem.org/submission/FOSDEM19">FOSDEM submission system</a>
-        and follow the instructions. If you previously spoke at FOSDEM, chances
-        are high that you already have an account! If you forgot your password,
-        do just reset it. If not, follow the instructions to create an account.
-        If you encounter any problems with the Pentabarf submission system,
-        please contact us and we will help you.</p>
-
-        <p>When you are logged in, please click on the "create event" item in the
-        menu to load the submission form. Then click on the "Show All" tab in the
-        top right corner of the browser window. (All the way to the right on a
-        large screen!)</p>
-
-        <p>Please include at least the following information:</p>
-
-        <ul>
-          <li>Your name, nick, contact information (public/only for orga) and a
-              short biography</li>
-          <li><span class="highlight">Select "Graph Processing Devroom" as the track.</span></li>
-          <li>The title and a short abstract describing your
-              presentation/demo/talk (max. 500 words)</li>
-          <li>Intended audience and goal of the talk (e.g., “Beginner”,
-              “Advanced”, "Analysts, helping them to discover and visualize
-              patterns" or "Developers, trying to optimize processing of highly
-              connected data sets")</li>
-          <li>The desired length of your time slot (typical 30 min. incl. 5
-              minutes for Q/A, or 5-10 minutes for lightning talks)</li>
-          <li>Links to background information on the given talk for the hungry
-              and impatient</li>
-          <li>Links to your previous talks, code snippets or repositories</li>
-        </ul>
-
-        <p>To avoid any kind of misunderstandings and lost submissions please send also a
-        short e-mail to <a href="mailto:fosdem2019@graphdevroom.org">fosdem2019@graphdevroom.org</a>
-        and wait for our confirmation.</p>
-
-        <div class="textareaclose">
-            <a href="javascript:HideTextarea('Submissions')"><i class="fa fa-times"></i></a>
-        </div>
-
-        <div class="nexttextarea">
-            <a href="javascript:ShowTextarea('Dates')">Important dates <i class="fa fa-arrow-right"></i></a>
-        </div>
-
-    </div>
-
-    <div id="Dates" style="width: 30%; padding-bottom: 40px; display: none" class="textarea">
-
-        <h1>Important dates</h1>
-
-        <table style="width: 100%">
-          <tbody>
-          <tr><td>Submission deadline              </td><td style="white-space: nowrap">02. Dec 2018</td></tr>
-          <tr><td>Notification of accepted speakers</td><td style="white-space: nowrap">09. Dec 2018</td></tr>
-          <tr><td>Schedule Publication             </td><td style="white-space: nowrap">16. Dec 2018</td></tr>
-          <tr><td>Devroom day (Room TBA)           </td><td style="white-space: nowrap">02. Feb 2019</td></tr>
-        </tbody></table>
-
-        <div class="textareaclose">
-            <a href="javascript:HideTextarea('Dates')"><i class="fa fa-times"></i></a>
-        </div>
-
-        <div class="nexttextarea">
-            <a href="javascript:ShowTextarea('Submissions')">Submit your idea <i class="fa fa-arrow-right"></i></a>
-        </div>
-
-    </div>
-
-    <div id="Team" style="padding-bottom: 10px; width: 32vw; display: none" class="textarea">
-
-        <h1>The Orgteam</h1>
-
-        <p>can be reached via <a href="mailto:fosdem2019@graphdevroom.org">fosdem2019@graphdevroom.org</a>.</p>
-
-        <ul>
-            <li>Michael Hunger, Caretaker Neo4j User Community</li>
-            <li>Martin Junghanns, University of Leipzig, Neo4j</li>
-            <li>Benoit Simard, Neo4j</li>
-        </ul>
-
-        <p>Any kind of ideas, suggestions and helping hands are <a href="https://etherpad.wikimedia.org/p/GraphDevroom" target="_blank">always</a> welcome.</p>
-
-        <div class="textareaclose">
-            <a href="javascript:HideTextarea('Team')"><i class="fa fa-times"></i></a>
-        </div>
-
-    </div>
-
-    <div id="Contact" style="display: none" class="textarea">
-
-        <h1>Stay in Contact</h1>
-
-        <p>In order to stay in contact and be updated with the latest news of the
-        event, you can either go to Twitter and follow <a href="https://twitter.com/graphdevroom" target="_blank">@GraphDevroom</a>
-        or search for #graphdevroom, or goto Google and subscribe to our
-        <a href="https://groups.google.com/d/forum/graphdevroom" target="_blank">Google Group</a>.</p>
-
-        <p>Impressions, recorded talks and slides from the last years are available
-        on <a href="http://www.youtube.com/graphprocessing" target="_blank">YouTube</a>
-        and <a href="http://www.slideshare.net/graphdevroom" target="_blank">SlideShare</a>.</p>
-
-        <div class="textareaclose">
-            <a href="javascript:HideTextarea('Contact')"><i class="fa fa-times"></i></a>
-        </div>
-
-    </div>
-
-    <div id="OpenData1">
-
-        <p>
-        Search, find, explore FOSDEM and the surrounding beautiful city of Brussels. The data is coming from:
-        </p>
-        <ul>
-            <li><a target="_blank" href="http://www.openstreetmap.org/">OpenStreetMap</a></li>
-            <li><a target="_blank" href="http://opendata.brussels.be/page/home/">Open Data Brussels</a></li>
-            <li><a target="_blank" href="http://www.graphhopper.com/">GraphHopper</a></li>
-            <li><a target="_blank" href="http://www.mapillary.com/">Mapillary</a></li>
-        </ul>
-
-    </div>
-
-    <div id="graphframe"><canvas id="graphcanvas" style="position: fixed" height="483" width="1670"></canvas></div>
-
-    <div id="links">
-        <a href="http://twitter.com/graphdevroom" target="_blank" style="font-size:80%"><i class="fa fa-twitter    fa-2x"></i></a>
-        <a href="https://github.com/graphdevroom" target="_blank" style="font-size:80%"><i class="fa fa-github     fa-2x"></i></a>
-        <a href="mailto:mail@graphdevroom.org" target="_blank" style="font-size:72%"><i class="fa fa-envelope-o fa-2x"></i></a>
-        <a href="http://graphdevroom.org/OpenPGP-Keys/mail@graphdevroom.org.key" target="_blank" style="font-size:72%"><i class="fa fa-lock       fa-2x"></i></a>
-    </div>
-
-
-
-
-
-<span id="buffer-extension-hover-button" style="display: none;position: absolute;z-index: 8675309;width: 100px;height: 25px;background-image: url(chrome-extension://noojglkidnpfjbincgijbaiedldjfbhh/data/shared/img/buffer-hover-icon@2x.png);background-size: 100px 25px;opacity: 0.9;cursor: pointer;"></span></body></html>
+<!DOCTYPE HTML>
+<!--
+	Paradigm Shift by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Graph Systems and Algorithms Devrooms @ FOSDEM</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Intro -->
+					<section class="intro">
+						<header>
+							<h1 style="width:22rem">Graph Systems and Algorithms</h1>
+							<p><a href="https://fosdem.org/2020/news/2019-10-01-accepted-developer-rooms/"><img src="images/FOSDEM_logo.svg" style="width:5em"></a> / <a href="https://fosdem.org/2020/schedule/track/graph_systems_and_algorithms/">Devroom</a></p>
+							<ul class="actions">
+								<li><a href="#first" class="arrow scrolly"><span class="label">Next</span></a></li>
+							</ul>
+						</header>
+						<div class="content">
+							<span class="image fill" data-position="center">
+								<img src="images/gruppe.jpg">
+							</span>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section id="CFP">
+						<header>
+							<h2>Call for Participation</h2>
+						</header>
+						<div class="content">
+							<p>The graph strikes back. After another year of development in the area of graph databases and graph processing systems, research in graph algorithms and advancement of graph query languages, it is time to come together again and talk about the latest developments in the open source graph world at our 10th FOSDEM devroom.</p>
+							<p>FOSDEM is an annually software developers meeting attended by over 8000+ free and open source enthusiasts from all over the world. The devroom will take place on Saturday, 1 February 2020 at the Université Libre de Bruxelles (Campus Solbosch) in Belgium.</p>
+							<p>In the last year, many organizations added graph analytical capabilities to their systems, e.g. Neo4j, Arango DB and Redis graph, to fulfill the rising demand of analytical use-cases, often to be executed on a steadily growing amount of data.</p>
+							<p>Graph query languages became mainstream. GQL, an effort driven by many graph database vendors, will be the first query language since SQL standardized by the ISO. openCypher, an open specification of the Neo4j Cypher query language will be part of Apache Spark 3.0. Research groups work on standardizing property graph schemas.</p>
+							<p>In previous devrooms we saw many great presentations and demos. Deep discussions took place during and after the talks. Therefore, also in 2020 we will again give creators and maintainers of graph solutions, researchers, geeks and open source hackers the possibility of presenting their latest work to an attentive audience.</p>
+							<p>Also: Belgian Beer </p>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section>
+						<header>
+							<h2>Topics</h2>
+						</header>
+						<div class="content">
+							<p></p>
+							<ul class="feature-icons">
+								<li class="icon solid fa-tablet-alt">Graph applications - Research, use-cases, industry experience</li>
+								<li class="icon solid fa-cog">Graph Processing / Analytics Frameworks - Neo4j Graph Algorithms, PGX, etc.</li>
+								<li class="icon solid fa-code-branch">Graph database systems - Neo4j, ArangoDB, etc.</li>
+								<li class="icon solid fa-search">Graph Query Languages - (open)Cypher, GQL, PGQL, GraphQL, etc.</li>
+								<li class="icon solid fa-stream">Graph Streaming and its applications</li>
+								<li class="icon solid fa-hourglass-half">Benchmarks - LDBC Graphalytics, etc.</li>
+								<li class="icon solid fa-project-diagram">Graph Visualization</li>
+							</ul>
+							<p>This list is not closed, other related topics are always welcome.</p>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section>
+						<header>
+							<h2>How to apply</h2>
+						</header>
+						<div class="content">
+							<p>Talks are submitted via FOSDEM's conference system <strong>Pentabarf</strong>. <br>
+								 In order to submitt a talk please follow these steps:
+								 <ol>
+									 <li> Head over to <a href="https://penta.fosdem.org/submission/FOSDEM20">https://penta.fosdem.org/submission/FOSDEM20</a></li>
+									 <li> Create an account if you do not have one already and sign in </li>
+									 <li> Make sure your profile information is up to date, including an image and a biographie</li>
+									 <li> Click on "Create Event"</li>
+									 <li>
+										 Enter the details of your talk
+										 <ul>
+												<li> The title and a short abstract describing your presentation/demo/talk (max. 500 words) </li>
+												<li> The intended audience </li>
+												<li> Links and background information </li>
+										 </ul>
+									 </li>
+									 <li> Make sure to select the "Graph Systems and Algorithms devroom" track</li>
+									 <li> Make sure to select a duration of either 20 or 40 minutes (including 5 minutes Q&A)</li>
+								 </ol>
+							</p>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section>
+						<header>
+							<h2>Important Dates</h2>
+						</header>
+						<div class="content">
+							<p>
+								 <ul class="alt">
+									 <li> 2019-10-09 - Devroom <a href="https://penta.fosdem.org/submission/FOSDEM20">CFP</a> starts </li>
+									 <li> 2019-12-01 - Devroom <a href="https://penta.fosdem.org/submission/FOSDEM20">CFP</a> ends </li>
+									 <li> 2020-02-01 - FOSDEM starts </li>
+									 <li> 2020-02-01 - Graph Systems and Algorithms Devroom </li>
+									 <li> 2020-02-02 - FOSDEM ends </li>
+								 </ul>
+							</p>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section>
+						<header>
+							<h2>Previous Devrooms</h2>
+						</header>
+						<div class="content">
+							<p>
+								 <ul class="alt">
+									 <li>2011 - <a href="https://archive.fosdem.org/2011/schedule/track/data_analytics_devroom.html">https://archive.fosdem.org/2011/schedule/track/data_analytics_devroom.html</a></li>
+									 <li>2012 - <a href="https://archive.fosdem.org/2012/schedule/track/graph_processing_devroom.html">https://archive.fosdem.org/2012/schedule/track/graph_processing_devroom.html</a></li>
+									 <li>2013 - <a href="https://archive.fosdem.org/2013/schedule/track/graph_processing/">https://archive.fosdem.org/2013/schedule/track/graph_processing/</a></li>
+									 <li>2014 - <a href="https://archive.fosdem.org/2014/schedule/track/graph_processing/">https://archive.fosdem.org/2014/schedule/track/graph_processing/</a></li>
+									 <li>2015 - <a href="https://archive.fosdem.org/2015/schedule/track/graph_processing/">https://archive.fosdem.org/2015/schedule/track/graph_processing/</a></li>
+									 <li>2016 - <a href="https://archive.fosdem.org/2016/schedule/track/graph_processing/">https://archive.fosdem.org/2016/schedule/track/graph_processing/</a></li>
+									 <li>2017 - <a href="https://archive.fosdem.org/2017/schedule/track/graph/">https://archive.fosdem.org/2017/schedule/track/graph/</a></li>
+									 <li>2018 - <a href="https://archive.fosdem.org/2018/schedule/track/graph_processing/">https://archive.fosdem.org/2018/schedule/track/graph_processing/</a></li>
+									 <li>2019 - <a href="https://archive.fosdem.org/2019/schedule/track/graph_processing/">https://archive.fosdem.org/2019/schedule/track/graph_processing/</a></li>
+								 </ul>
+							</p>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section>
+						<header>
+							<h2>Get in touch</h2>
+							<p>
+								The devroom is organized by
+								<ul class="simple">
+									<li>Max Kießling, Neo4j</li>
+									<li>Martin Junghanns, Neo4j</li>
+									<li>Michael Hunger, Neo4j</li>
+								</ul>
+
+								If you want to get in touch with us, please feel free to use one of the following channels
+							</p>
+						</header>
+						<div class="content">
+							<p>
+								<span style="font-size:2em">
+									<img src="images/FOSDEM_logo.svg" alt="" style="height:10em"/>
+									FOSDEM 2020
+								</span>
+							</p>
+							<p>
+								<img src="images/neo4j_logo.svg" class="image fit" data-position="center" alt="" />
+							</p>
+						</div>
+						<footer>
+							<ul class="items">
+								<li>
+									<h3><i class="icon solid fa-envelope"></i>Email</h3>
+									<a href="mailto:mail@graphdevroom.org">mail@graphdevroom.org</a>
+								</li>
+								<li>
+									<h3><i class="icon brands fa-twitter"></i>Twitter</h3>
+									<a href="https://twitter.com/GraphDevroom">@graphdevroom</a>
+								</li>
+								<li>
+									<h3><i class="icon brands fa-github"></i>Github</h3>
+									<a href="https://github.com/graphdevroom">graphdevroom</a>
+								</li>
+							</ul>
+						</footer>
+					</section>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,714 @@
+///
+/// Paradigm Shift by HTML5 UP
+/// html5up.net | @ajlkn
+/// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+///
+
+/* Wrapper */
+
+	@mixin wrapper-pad($pad) {
+		padding: 0 0 ($pad * 2) 0;
+
+		// Sections (all).
+			section {
+				margin: ($pad * 1.5) 0 0 0;
+
+				> header {
+					padding: 0 ($pad * 2) 0 ($pad);
+					width: _size(header-width) + ($pad * 2);
+				}
+
+				> .content {
+					padding: 0 $pad;
+				}
+
+				> footer {
+					padding: 0 ($pad * 2);
+				}
+			}
+
+		// Sections (top level).
+			> section {
+				> header {
+
+					// Line.
+						&:before {
+							height: calc(100% + #{$pad * 2});
+							left: calc(50vw - #{$pad});
+						}
+
+					// Headings.
+						h1, h2 {
+
+							// Line connector.
+								&:before {
+									right: ($pad * -1);
+									width: ($pad * 0.5);
+								}
+
+							// Terminator.
+								&:after {
+									right: ($pad * -0.5);
+								}
+
+						}
+
+				}
+
+				> .content {
+					> section {
+						left: calc(-50vw - #{$pad});
+
+						> header {
+							width: _size(subheader-width) + ($pad * 2);
+						}
+					}
+				}
+
+				// Intro.
+					&.intro {
+						> header {
+
+							// Hack: Chrome's grid implementation screws up absolute element placement within a static child element.
+
+								// Set width on all child elements and right-align.
+									> * {
+										width: (_size(header-width) - $pad);
+									}
+
+								// Line.
+									&:before {
+										margin-left: calc(50vw - #{$pad * 2});
+									}
+
+								@include breakpoint('<=medium') {
+									> * {
+										width: 100%;
+									}
+
+									&:before {
+										margin-left: 0;
+									}
+								}
+
+						}
+					}
+
+				// Last.
+					&:last-of-type {
+						> header {
+
+							// Terminator.
+								&:after {
+									left: calc(50vw - #{$pad} - 0.25rem + #{_size(line-width) * 0.5});
+								}
+
+						}
+					}
+
+			}
+
+		// Copyright.
+			.copyright {
+				padding: 0 $pad;
+			}
+
+	}
+
+	@mixin wrapper-pad-portrait($pad, $tbFactor: 1) {
+
+		// Sections (all).
+			section {
+				margin: ($pad * 1.5) 0 0 0;
+			}
+
+		// Sections (top level).
+			> section {
+				margin: 0;
+
+				> header {
+					padding: ($pad * $tbFactor) $pad;
+				}
+
+				> .content {
+					padding: ($pad * $tbFactor) $pad;
+
+					> section {
+						margin: ($pad * $tbFactor) 0;
+					}
+				}
+
+				> footer {
+					padding: 0 $pad ($pad * $tbFactor) $pad;
+				}
+
+				// Intro.
+					&.intro {
+						> header {
+							padding: (($pad * 1.25) + 3rem) $pad ($pad * 1.25) $pad;
+						}
+					}
+
+			}
+
+		// Copyright.
+			.copyright {
+				padding: 0 $pad $pad $pad;
+			}
+
+	}
+
+	#wrapper {
+		$pad: 5rem;
+
+		position: relative;
+		width: 100vw;
+
+		// Background.
+			&:before {
+				background-attachment: fixed;
+				background-color: _palette(accent);
+				background-image: url("../../images/graph.svg");
+				background-position: -50% 10%;
+				background-repeat: repeat-y;
+				background-size: 75% auto;
+				content: '';
+				display: block;
+				height: 100%;
+				left: 0;
+				position: absolute;
+				top: 0;
+				width: 50vw;
+				z-index: -1;
+			}
+
+		// Sections (all).
+			section {
+				display: grid;
+				grid-template-areas: "header content" "footer content";
+				grid-template-columns: 50vw 50vw;
+				grid-template-rows: 1fr;
+
+				&:first-child {
+					margin-top: 0;
+				}
+
+				> header {
+					grid-area: header;
+					justify-self: end;
+					text-align: right;
+
+					h2 {
+						margin: 0 0 (_size(element-margin) * 2.5) 0;
+					}
+
+					h1 + p {
+						font-family: _font(family-heading);
+						font-size: 0.8rem;
+						font-weight: _font(weight-heading-extralight);
+						letter-spacing: _font(kerning-heading);
+						line-height: 2.5;
+						text-transform: uppercase;
+					}
+
+					ul.actions {
+						justify-content: flex-end;
+					}
+				}
+
+				> .content {
+					grid-area: content;
+					max-width: _size(content-width);
+					position: relative;
+				}
+
+				> footer {
+					grid-area: footer;
+					text-align: right;
+
+					ul.actions {
+						justify-content: flex-end;
+					}
+				}
+			}
+
+		// Sections (top level).
+			> section {
+				position: relative;
+
+				> header {
+
+					// Line.
+						&:before {
+							background: _palette(accent-border);
+							content: '';
+							display: block;
+							margin-top: 1rem;
+							position: absolute;
+							width: _size(line-width);
+						}
+
+					// Headings.
+						h1, h2 {
+							position: relative;
+
+							// Line connector.
+								&:before {
+									background: _palette(accent-border);
+									content: '';
+									display: block;
+									height: _size(line-width);
+									position: absolute;
+									top: 1rem;
+								}
+
+							// Terminator.
+								&:after {
+									background: _palette(accent-border);
+									border-radius: 0.5rem;
+									content: '';
+									display: block;
+									height: 0.5rem;
+									position: absolute;
+									top: 0.75rem;
+									width: 0.5rem;
+								}
+
+						}
+
+						h1 {
+							margin-top: -2rem;
+
+							&:before {
+								top: 3rem;
+							}
+
+							&:after {
+								top: 2.75rem;
+							}
+						}
+
+				}
+
+				> .content {
+					> section {
+						position: relative;
+
+						&:first-child {
+							margin-top: 6rem;
+						}
+					}
+				}
+
+				// Intro.
+					&.intro {
+						align-items: center;
+
+						> header {
+							padding-top: 4rem;
+
+							// Hack: Chrome's grid implementation screws up absolute element placement within a static child element.
+								width: 100%;
+
+								// Set width on all child elements and right-align.
+									> * {
+										margin-left: auto;
+									}
+
+								// Line.
+									&:before {
+										left: auto;
+									}
+
+						}
+
+						> .content {
+							height: 100vh;
+							max-width: none;
+						}
+					}
+
+				// Last.
+					&:last-of-type {
+						> header {
+
+							// Line.
+								&:before {
+									height: 100%;
+								}
+
+							// Terminator.
+								&:after {
+									background: _palette(accent-border);
+									border-radius: 0.5rem;
+									bottom: -1.5rem;
+									content: '';
+									display: block;
+									height: 0.5rem;
+									position: absolute;
+									width: 0.5rem;
+									z-index: 1;
+								}
+
+						}
+					}
+
+			}
+
+		// Copyright.
+			.copyright {
+				color: _palette(fg-light);
+				font-size: 1rem;
+				left: 50vw;
+				position: relative;
+				width: 50vw;
+
+				a {
+					color: inherit;
+				}
+			}
+
+		// Pad.
+			@include wrapper-pad($pad);
+
+		@include breakpoint('<=large') {
+			$pad: 4rem;
+
+			// Pad.
+				@include wrapper-pad($pad);
+
+		}
+
+		@include breakpoint('<=medium') {
+			$pad: 4rem;
+
+			padding: 0;
+
+			// Background.
+				&:before {
+					display: none;
+				}
+
+			// Sections (all).
+				section {
+					grid-template-areas: "header" "content" "footer";
+					grid-template-columns: 1fr;
+					grid-template-rows: 3fr;
+
+					> header {
+						justify-self: start;
+						padding: 0;
+						text-align: left;
+						width: 100%;
+
+						ul.actions {
+							justify-content: flex-start;
+						}
+					}
+
+					> .content {
+						padding: 0;
+						width: 100%;
+						overflow-x: hidden;
+					}
+
+					> footer {
+						padding: 0;
+						text-align: left;
+
+						ul.actions {
+							justify-content: flex-start;
+						}
+					}
+				}
+
+			// Sections (top level).
+				> section {
+					margin: 0;
+
+					> header {
+						background-attachment: fixed;
+						background-color: _palette(accent);
+						background-image: url("../../images/graph.svg");
+						background-position: 25% 50%;
+						background-repeat: repeat-y;
+						background-size: 40rem auto;
+
+						> * {
+							max-width: 25rem;
+						}
+
+						> :last-child {
+							margin-bottom: 0;
+						}
+
+						// Line.
+							&:before {
+								display: none;
+							}
+
+						// Headings.
+							h1, h2 {
+
+								// Line connector.
+									&:before {
+										display: none;
+									}
+
+								// Terminator.
+									&:after {
+										display: none;
+									}
+
+							}
+
+					}
+
+					> .content {
+						> :last-child {
+							margin-bottom: 0;
+						}
+
+						> section {
+							left: 0;
+
+							&:first-child {
+								margin-top: 0;
+							}
+
+							> header {
+								width: 100%;
+							}
+
+							&:last-child {
+								margin-bottom: 0;
+							}
+						}
+					}
+
+					> footer {
+						> :last-child {
+							margin-bottom: 0;
+						}
+					}
+
+					// Intro.
+						&.intro {
+							margin-bottom: 0;
+
+							> header {
+								margin-bottom: 0;
+
+								ul.actions {
+									display: none;
+								}
+
+								// Hack: Undo Chrome grid hack.
+									> * {
+										margin-left: 0;
+										margin-right: 0;
+										width: 100%;
+									}
+
+									> ul.actions {
+										margin-left: (_size(element-margin) * -0.5);
+									}
+
+									&:before {
+										margin-left: 0;
+									}
+
+							}
+						}
+
+					// Last.
+						&:last-of-type {
+							> header {
+
+								// Terminator.
+									&:after {
+										display: none;
+									}
+
+							}
+						}
+
+				}
+
+			// Copyright.
+				.copyright {
+					left: 0;
+					width: 100%;
+				}
+
+			// Pad.
+				@include wrapper-pad-portrait($pad);
+
+		}
+
+		@include breakpoint('<=small') {
+			$pad: 2rem;
+
+			// Pad.
+				@include wrapper-pad-portrait($pad, 1.5);
+
+		}
+
+		@include breakpoint('<=xxsmall') {
+			$pad: 1.5rem;
+
+			// Pad.
+				@include wrapper-pad-portrait($pad, 1.5);
+
+		}
+
+	}
+
+	// Mobile.
+		body.is-mobile {
+			#wrapper {
+
+				// Background.
+					&:before {
+						background-attachment: scroll;
+						background-position: 50% -3%;
+						background-repeat: repeat-y;
+						background-size: 150% auto;
+					}
+
+				// Sections (top level).
+					> section {
+						> header {
+							background-attachment: scroll;
+							background-position: 25% 50%;
+						}
+
+						// Intro.
+							&.intro {
+								> header {
+									background-position: 25% 23%;
+								}
+							}
+
+					}
+
+			}
+		}
+
+	// Preload.
+		#wrapper {
+
+			// Background.
+				&:before {
+					transition: opacity 1s ease;
+
+					body.is-preload & {
+						opacity: 0;
+					}
+				}
+
+			// Sections (top level).
+				> section {
+
+					// Intro.
+						&.intro {
+							transition: opacity 1s ease;
+							opacity: 1;
+
+							> header {
+								transition: transform 1s ease;
+							}
+
+							> .content {
+								transition: transform 1s ease;
+							}
+
+							body.is-preload & {
+								opacity: 0;
+
+								> header {
+									transform: translateY(1rem);
+								}
+
+								> .content {
+									transform: translateY(-1rem);
+								}
+							}
+
+							@include breakpoint('<=large') {
+								> header {
+									> * {
+										transition: transform 1s ease, opacity 1s ease;
+									}
+								}
+
+								body.is-preload & {
+									> header {
+										transform: none;
+
+										> * {
+											transform: translate(-0.5rem);
+											opacity: 0;
+										}
+									}
+
+									> .content {
+										transform: none;
+									}
+								}
+							}
+						}
+
+				}
+
+		}
+
+	// IE.
+		body.is-ie {
+			#wrapper {
+				$pad: 5rem;
+
+				// Sections (all).
+					section {
+						display: flex;
+						flex-wrap: wrap;
+
+						> header {
+							width: 50%;
+						}
+
+						> .content {
+							width: 50%;
+						}
+
+						> footer {
+							width: 50%;
+							text-align: left;
+							margin-left: 50%;
+							padding: $pad;
+						}
+					}
+
+				// Sections (top level).
+					> section {
+						> .content {
+							> section {
+								width: 100vw;
+							}
+						}
+					}
+
+				@include breakpoint('<=large') {
+					$pad: 4rem;
+
+					// Sections (all).
+						section {
+							> footer {
+								padding: $pad;
+							}
+						}
+
+				}
+
+			}
+		}
